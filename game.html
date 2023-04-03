@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shooting Game</title>
+    <style>
+      #canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+      // Initialize the canvas and context
+      var canvas = document.getElementById("canvas");
+      var context = canvas.getContext("2d");
+      
+      // Set up the target
+      var targetX = canvas.width / 2;
+      var targetY = canvas.height / 2;
+      var targetRadius = 20;
+      
+      // Set up the player's score
+      var score = 0;
+      
+      // Draw the target on the canvas
+      function drawTarget() {
+        context.beginPath();
+        context.arc(targetX, targetY, targetRadius, 0, 2 * Math.PI);
+        context.fillStyle = "red";
+        context.fill();
+        context.closePath();
+      }
+      
+      // Check if the player hit the target
+      function hitTarget(mouseX, mouseY) {
+        var distance = Math.sqrt(Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2));
+        if (distance <= targetRadius) {
+          score++;
+          targetX = Math.random() * canvas.width;
+          targetY = Math.random() * canvas.height;
+        }
+      }
+      
+      // Draw the score on the canvas
+      function drawScore() {
+        context.font = "20px Arial";
+        context.fillStyle = "black";
+        context.fillText("Score: " + score, 10, 30);
+      }
+      
+      // Clear the canvas and redraw the target and score
+      function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawTarget();
+        drawScore();
+      }
+      
+      // Add a click listener to the canvas
+      canvas.addEventListener("click", function(event) {
+        hitTarget(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+        draw();
+      });
+      
+      // Start the game loop
+      setInterval(draw, 10);
+    </script>
+  </body>
+</html>
